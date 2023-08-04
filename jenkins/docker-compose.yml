@@ -21,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: jenkins-blueocean:1.0
     restart: on-failure
     networks:
       - jenkins
