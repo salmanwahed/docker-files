@@ -1,0 +1,20 @@
+version: "3"
+services: 
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    container_name: "rabbitmq"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "c15927ab8764d6bba412fe19cbeff4a3592620e968041ea00c5c27f2a72fd395"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - rabbitmq_network
+networks:
+  rabbitmq_network:
+    driver: bridge
+volumes:
+  rabbitmq_data:
+
