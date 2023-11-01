@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  postgres14:
+    image: postgres:14-bullseye
+    container_name: postgres14
+    ports:
+      - 5414:5432
+    volumes:
+      - postgres14_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=admin
+
+volumes:
+  postgres14_data:
