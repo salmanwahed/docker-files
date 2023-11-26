@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15-bookworm
+    container_name: pg15
+    ports:
+      - 5455:5432
+    volumes:
+      - pg15_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=admin
+
+volumes:
+  pg15_data:
