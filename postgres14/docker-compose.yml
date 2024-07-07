@@ -8,7 +8,9 @@ services:
     volumes:
       - postgres14_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=progoti
+      - POSTGRES_PASSWORD=Pr0g0ti
+      - POSTGRES_DB=tallykhata_log
 
 volumes:
   postgres14_data:

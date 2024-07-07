@@ -8,16 +8,10 @@ services:
     volumes:
       - timescaledb_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=admin
-  
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: pgadmin
-  #   ports:
-  #     - 8054:80
-  #   environment:
-  #     - PGADMIN_DEFAULT_EMAIL=salman@example.com
-  #     - PGADMIN_DEFAULT_PASSWORD=admin
+      - POSTGRES_USER=progoti
+      - POSTGRES_PASSWORD=Pr0g0ti
+      - POSTGRES_DB=tallykhata_log
 
 volumes:
   timescaledb_data:
+ 

@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   jenkins-docker:
@@ -21,7 +21,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: jenkins-blueocean:1.0
     restart: on-failure
     networks:
       - jenkins
@@ -30,7 +29,7 @@ services:
     environment:
       DOCKER_HOST: tcp://docker:2376
       DOCKER_CERT_PATH: /certs/client
-      DOCKER_TLS_VERIFY: '1'
+      DOCKER_TLS_VERIFY: "1"
     ports:
       - "8080:8080"
       - "50000:50000"
