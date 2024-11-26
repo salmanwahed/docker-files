@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:13.18-apline
+    container_name: postgres
+    restart: always
+    ports:
+      - 5453:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+    command: ["-c", "config_file=/etc/postgresql/postgresql.conf"]
+    environment:
+      - POSTGRES_USER=salman
+      - POSTGRES_PASSWORD=salmanwahed
+volumes:
+  postgres_data:
+    driver: local
