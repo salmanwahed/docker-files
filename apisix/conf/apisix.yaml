@@ -1,5 +1,5 @@
 apisix:
-  node_listen: 9080              # APISIX listening port
+  node_listen: 9080
   enable_ipv6: false
 
   enable_control: true
@@ -7,25 +7,31 @@ apisix:
     ip: "0.0.0.0"
     port: 9092
 
+  ssl:
+    listen:
+      - port: 9443
+    ssl_certificate: "/etc/letsencrypt/live/apptronium.com/fullchain.pem"
+    ssl_certificate_key: "/etc/letsencrypt/live/apptronium.com/privkey.pem"
+
 deployment:
   admin:
-    allow_admin:               # http://nginx.org/en/docs/http/ngx_http_access_module.html#allow
-      - 0.0.0.0/0              # We need to restrict ip access rules for security. 0.0.0.0/0 is for test.
+    allow_admin:
+      - 0.0.0.0/0
 
     admin_key:
       - name: "admin"
-        key: edd1c9f034335f136f87ad84b625c8f1
-        role: admin                 # admin: manage all configuration data
+        key: ebd2791b451a4344b4b02f6af000545a
+        role: admin
 
       - name: "viewer"
-        key: 4054f7cf07e344346cd3f287985e76a2
+        key: 0cf1dcdf01fa42e899a8bef9d2bca401
         role: viewer
 
   etcd:
-    host:                           # it's possible to define multiple etcd hosts addresses of the same etcd cluster.
-      - "http://etcd:2379"          # multiple etcd address
-    prefix: "/apisix"               # apisix configurations prefix
-    timeout: 30                     # 30 seconds
+    host:
+      - "http://etcd:2379"
+    prefix: "/apisix"
+    timeout: 30
 
 plugin_attr:
   prometheus:
