@@ -1,65 +1,51 @@
-version: "3"
 services:
-    etcd:
-        image: bitnami/etcd:3.4.15
-        container_name: etcd
-        restart: always
-        volumes:
-            - etcd_data:/bitnami/etcd
-        environment:
-            ETCD_ENABLE_V2: "true"
-            ALLOW_NONE_AUTHENTICATION: "yes"
-            ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
-            ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
-        networks:
-            apisix:
+  etcd:
+    image: bitnami/etcd:3.4.15
+    container_name: etcd
+    restart: always
+    volumes:
+      - etcd_data:/bitnami/etcd
+    environment:
+      ETCD_ENABLE_V2: "true"
+      ALLOW_NONE_AUTHENTICATION: "yes"
+      ETCD_ADVERTISE_CLIENT_URLS: "http://etcd:2379"
+      ETCD_LISTEN_CLIENT_URLS: "http://0.0.0.0:2379"
+    networks:
+      apisix:
 
-    apisix:
-        image: apache/apisix:3.11.0-debian
-        container_name: apisix
-        restart: always
-        volumes:
-            - ./conf/apisix.yaml:/usr/local/apisix/conf/config.yaml:ro
-            - ./certs:/etc/letsencrypt/live/apptronium.com:ro  # Mount the Certbot certificates here
-        depends_on:
-            - etcd
-            - certbot
-        ports:
-            - "80:80"
-            - "443:9443"  # Expose the HTTPS port for APISIX
-        environment:
-            - VIRTUAL_HOST=apptronium.com
-            - VIRTUAL_PORT=9080
-        networks:
-            - apisix
+  apisix:
+    image: apache/apisix:3.11.0-debian
+    container_name: apisix
+    restart: always
+    volumes:
+      - ./conf/apisix.yaml:/usr/local/apisix/conf/config.yaml:ro
+      # Mount Let's Encrypt SSL certificates from host
+      - /etc/letsencrypt/live/apptronium.com/fullchain.pem:/etc/letsencrypt/live/apptronium.com/fullchain.pem:ro
+      - /etc/letsencrypt/live/apptronium.com/privkey.pem:/etc/letsencrypt/live/apptronium.com/privkey.pem:ro
+    depends_on:
+      - etcd
+    ports:
+      - "80:9080"
+      - "443:9443"
+      - "9180:9180"
+    networks:
+      apisix:
 
-    apisix-dashboard:
-        image: apache/apisix-dashboard:3.0.1-alpine
-        container_name: apisix-dashboard
-        restart: always
-        volumes:
-            - ./conf/dashboard.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
-        ports:
-            - "8384:9000"
-        networks:
-            apisix:
-
-    certbot:
-        image: certbot/certbot
-        container_name: certbot
-        volumes:
-            - ./certs:/etc/letsencrypt
-        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-        environment:
-            - "CERTBOT_EMAIL=devnamlas@gmail.com"
-            - "CERTBOT_DOMAINS=apptronium.com"
-        networks:
-            - apisix
+  apisix-dashboard:
+    image: apache/apisix-dashboard:3.0.1-alpine
+    container_name: apisix-dashboard
+    restart: always
+    volumes:
+      - ./conf/dashboard.yaml:/usr/local/apisix-dashboard/conf/conf.yaml
+    ports:
+      - "8384:9000"
+    networks:
+      apisix:
 
 networks:
-    apisix:
-        driver: bridge
+  apisix:
+    driver: bridge
 
 volumes:
-    etcd_data:
-        driver: local
+  etcd_data:
+    driver: local
