@@ -12,6 +12,10 @@ apisix:
       - port: 9443  # Listening on HTTPS port 9443
     ssl_certificate: "/etc/letsencrypt/live/apptronium.com/fullchain.pem"  # Path to the certificate
     ssl_certificate_key: "/etc/letsencrypt/live/apptronium.com/privkey.pem"  # Path to the private key
+    sni:
+    - host: "apptronium.com"
+      ssl_certificate: "/etc/letsencrypt/live/apptronium.com/fullchain.pem"
+      ssl_certificate_key: "/etc/letsencrypt/live/apptronium.com/privkey.pem"
 
 deployment:
   admin:
