@@ -1,0 +1,11 @@
+
+version: '3'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      # Mount the HTML files from local directory to nginx container
+      - ./html:/usr/share/nginx/html
+    restart: always
