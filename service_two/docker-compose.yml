@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  service-one:
+  service-two:
     build: .
     ports:
       - "5002:5002"
