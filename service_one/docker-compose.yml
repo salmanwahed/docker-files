@@ -14,4 +14,4 @@ services:
 
 networks:
   apptronium_net:
-    driver: bridge
+    external: true
