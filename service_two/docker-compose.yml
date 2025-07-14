@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  service-one:
+    build: .
+    ports:
+      - "5002:5002"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+    networks:
+      - apptronium_net
+
+networks:
+  apptronium_net:
+    driver: bridge
