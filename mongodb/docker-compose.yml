@@ -1,30 +1,38 @@
-version: '3.1'
 services:
   mongodb:
-    image: mongo:latest
+    image: mongo:8.0
     container_name: mongodb
     command: ["--bind_ip_all"]
+    restart: unless-stopped
     ports:
-      - 27027:27017
+      - "27027:27017"
     networks:
       - mongo_network
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
     volumes:
-      - "mongo_data:/data/db"
+      - mongo_data:/data/db
+
   mongo-express:
-    image: mongo-express:latest
+    image: mongo-express:1.0.2-20-alpine3.19
     container_name: mongo_express
     depends_on:
       - mongodb
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
     networks:
       - mongo_network
-    restart: always
-    ports:
-      - 8081:8081
     environment:
-      - ME_CONFIG_MONGODB_SERVER=mongodb
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_ROOT_USERNAME}:${MONGO_ROOT_PASSWORD}@mongodb:27017/
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_BASIC_AUTH_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_BASIC_AUTH_PASSWORD}
+
 volumes:
   mongo_data:
 
 networks:
-    mongo_network:
-      driver: bridge
+  mongo_network:
+    driver: bridge
